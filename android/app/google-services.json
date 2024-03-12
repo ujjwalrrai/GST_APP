@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "308009840789",
+    "project_id": "gst-notes",
+    "storage_bucket": "gst-notes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308009840789:android:f5cbad28f21f300870ab9c",
+        "android_client_info": {
+          "package_name": "com.example.sies_gst_notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM1maC3vpAtZT_NSpcZs1H_7bmrZ-98ts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
