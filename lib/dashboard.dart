@@ -111,12 +111,6 @@ class _MyDashboardState extends State<MyDashboard> {
           SizedBox(height: 20.0),
           Expanded(
             child: Container(
-              // decoration: BoxDecoration(
-              //   image: DecorationImage(
-              //     image: AssetImage('assets/hello2.jpg'),
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
               padding: EdgeInsets.all(20.0),
               child: GridView.count(
                 crossAxisCount: 2,

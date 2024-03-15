@@ -16,9 +16,6 @@ class _TEsem1State extends State<TEsem1> {
       decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage('assets/last.jpg'), fit: BoxFit.cover)
       ),
-
-
-
       child: Column(
 
           children: [

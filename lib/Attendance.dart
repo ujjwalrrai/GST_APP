@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sies_gst_notes/DivA.dart';
+import 'package:sies_gst_notes/calendar.dart';
 
 void main() {
   runApp(Attendance());
@@ -50,7 +51,7 @@ class Attendance extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DivA(),
+                            builder: (context) => Calendar(),
                           ),
                         );
                       },
