@@ -1,187 +1,127 @@
 import 'package:flutter/material.dart';
-import 'package:sies_gst_notes/register.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher package
 
-class FEsem2 extends StatefulWidget {
-  const FEsem2({super.key});
+class FEsem2new extends StatefulWidget {
+  const FEsem2new({Key? key});
 
   @override
-  State<FEsem2> createState() => _FEsem2State();
+  State<FEsem2new> createState() => _FEsem1newState();
 }
 
-class _FEsem2State extends State<FEsem2> {
+class _FEsem1newState extends State<FEsem2new> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('assets/last.jpg'), fit: BoxFit.cover)
+    return Scaffold(
+      backgroundColor: Color(0xFFe1d5c9),
+      body: Column(
+        children: [
+          Container(
+            height: 238,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(60),
+              ),
+              color: Color(0xFF222224),
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 80,
+                  child: Container(
+                    height: 100,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(50),
+                        topRight: Radius.circular(50),
+                      ),
+                      color: Color(0xFFe1d5c9),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 115,
+                  left: 20,
+                  child: Text(
+                    "Select your Subject",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Color(0xFF222224),
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 60),
+          buildSubjectContainer(
+            subjectName: "Engineering Physics 1",
+            googleDriveLink: "https://drive.google.com/drive/folders/1ZeR8RYw-yHcMhsjVIMos29ugzro9kzOw?usp=drive_link",
+          ),
+          buildSubjectContainer(
+            subjectName: "Engineering Chemistry 1",
+            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          ),
+          buildSubjectContainer(
+            subjectName: "Engineering Mathematics 1",
+            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          ),
+          buildSubjectContainer(
+            subjectName: "Basic Electrical Engineering",
+            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          ),
+          buildSubjectContainer(
+            subjectName: "Engineering Mechanics",
+            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          ),
+        ],
       ),
+    );
+  }
 
-
-
-      child: Column(
-
-          children: [
-            SizedBox(
-              height:  125,
+  GestureDetector buildSubjectContainer({
+    required String subjectName,
+    required String googleDriveLink,
+  }) {
+    return GestureDetector(
+      onTap: () async {
+        // Launch the Google Drive link in the default browser
+        if (await canLaunch(googleDriveLink)) {
+          await launch(googleDriveLink);
+        } else {
+          throw 'Could not launch $googleDriveLink';
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 0, top: 0, right: 0, left: 0),
+        height: 70,
+        width: 400,
+        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color(0xFFaf8a58),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(50),
+              bottomRight: Radius.circular(50),
             ),
-            Text("Select   Subject",style: TextStyle(color: Colors.white, fontSize: 50,fontWeight: FontWeight.w700,decoration: TextDecoration.none,   fontFamily: 'Teko',),),
-            SizedBox(
-              height:20,
-            ),
-            ElevatedButton(
-              child: const Text(''
-                  'Engineering Physics 2',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1XCbRz0SuoXXS6ctqYl1QCUBIJD4Sex0i?usp=drive_link';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0), // Set the desired width and height
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                subjectName,
+                style: TextStyle(
+                  color: Color(0xFF222224),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                ),
               ),
-
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-            ElevatedButton(
-              child: const Text('Engineering Chemistry 2',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1KYJt3l1p7n5YZZzZZ3-S-1tGMhbpPiVh?usp=drive_link';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              child: const Text('Engineering Mathematics 2 ',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1bj85BufFlVEhcK0oHUXP0eUGcTvgt3u2?usp=drive_link';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              child: const Text('C Programming',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1OPqYq6bfgaobEX2YlHCfGhVKxmFu7PqK';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0),
-              ),
-
-
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              child: const Text('Engineering Graphics',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1pNqiVfRbjrKE7J0JhIbF26xD3wnwQ5Z8';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0),
-              ),
-
-
-            ),
-            SizedBox(
-              height: 20,
-            ),
-
-
-
-            ElevatedButton(
-              child: const Text('Professional Communication and Ethics',style: TextStyle(fontFamily: 'Teko', fontSize: 22),),
-              onPressed: () async {
-                const url = 'https://drive.google.com/drive/folders/1bwmFWPRILBQRGjePnZfoJyaeHh9QhpPs?usp=sharing';
-                try {
-                  await launch(
-                    url,
-                    forceSafariVC: false,
-                    forceWebView: true,
-                    universalLinksOnly: true,
-                    enableJavaScript: true,
-                  );
-                } catch (e) {
-                  print('Error: $e');
-                }
-              },
-
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(350.0, 50.0),
-              ),
-
-
-            ),
-          ]),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

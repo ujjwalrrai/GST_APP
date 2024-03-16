@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:sies_gst_notes/calendar.dart';
+import 'package:sies_gst_notes/AbsentePhysicsG.dart';
+// import 'package:sies_gst_notes/calendar.dart';
 import 'package:sies_gst_notes/login.dart';
 
 class Introduction extends StatelessWidget {
@@ -10,15 +11,19 @@ class Introduction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       
+      
       body: Container(
+        
         margin: EdgeInsets.only(top: 0.0), // Adding margin from top
         child: IntroductionScreen(
+          
           globalBackgroundColor: Color(0xFF222224),
           scrollPhysics: BouncingScrollPhysics(),
           pages: [
+            
             PageViewModel(
               titleWidget: Text(
-                "Write Title ",
+                "NOTES",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -26,7 +31,7 @@ class Introduction extends StatelessWidget {
                 ),
               ),
                bodyWidget: Text(
-    "Introduction Screen allows you to have a screen on an app's first launch to, for example, explain your app. This widget is very customizable with a great design.",
+    "Access comprehensive notes tailored to your courses, ensuring you never miss important information. With organized categorization and search functionalities, finding relevant material is effortless, facilitating efficient studying and academic success.",
     style: TextStyle(
       color: Colors.white,
       fontSize: 17,
@@ -40,7 +45,7 @@ class Introduction extends StatelessWidget {
             ),
             PageViewModel(
               titleWidget: Text(
-                "Write Title ",
+                "BLOGS",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -48,7 +53,7 @@ class Introduction extends StatelessWidget {
                 ),
               ),
                 bodyWidget: Text(
-    "Introduction Screen allows you to have a screen on an app's first launch to, for example, explain your app. This widget is very customizable with a great design.",
+    "Engage with the vibrant academic community through our interactive blogging platform. Share insights, discuss topics, and collaborate with peers and faculty members, fostering a dynamic exchange of ideas and enriching your learning experience beyond the classroom.",
     style: TextStyle(
        fontSize: 17,
       color: Colors.white,
@@ -62,8 +67,9 @@ class Introduction extends StatelessWidget {
               ),
             ),
             PageViewModel(
+              
               titleWidget: Text(
-                "Write Title ",
+                "ATTENDANCE",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30,
@@ -71,7 +77,7 @@ class Introduction extends StatelessWidget {
                 ),
               ),
               bodyWidget: Text(
-    "Introduction Screen allows you to have a screen on an app's first launch to, for example, explain your app. This widget is very customizable with a great design.",
+    "Seamlessly track your attendance for classes with our intuitive attendance feature. Receive timely reminders, view your attendance history, and stay on top of your academic commitments, empowering you to maintain excellent attendance records effortlessly",
     style: TextStyle(
        fontSize: 17,
       color: Colors.white,
@@ -87,10 +93,15 @@ class Introduction extends StatelessWidget {
           onDone: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => MyLogin()),
+              MaterialPageRoute(builder: (context) =>MyLogin()),
             );
           },
-          onSkip: () {},
+          onSkip: () {
+             Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>MyLogin()),
+            );
+          },
           showSkipButton: true,
           skip: Text(
             "Skip",
@@ -120,8 +131,11 @@ class Introduction extends StatelessWidget {
             spacing: EdgeInsets.symmetric(horizontal: 3.0),
             activeShape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
+          
             ),
-          ),
+          
+           ),
+            
         ),
       ),
     );

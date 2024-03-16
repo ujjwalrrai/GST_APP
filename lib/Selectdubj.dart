@@ -1,37 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:sies_gst_notes/ChemG.dart';
+import 'package:sies_gst_notes/CpG.dart';
+import 'package:sies_gst_notes/GraphicsG.dart';
+import 'package:sies_gst_notes/PceG.dart';
+import 'package:sies_gst_notes/mathG.dart';
 // import 'package:sies_gst_notes/DivA.dart';
-import 'package:sies_gst_notes/Selectdubj.dart';
-// import 'package:sies_gst_notes/calendar.dart';
+// // import 'package:sies_gst_notes/calendar.dart';
+import 'package:sies_gst_notes/physicsG.dart';
 
-void main() {
-  runApp(Attendance());
-}
-
-class Attendance extends StatelessWidget {
+class Selectsubj extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Remove debug banner
       home: Scaffold(
         backgroundColor: Color(0xFFe1d5c9),
-        
         body: Column(
-          
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Container(
               height: 220.0,
               decoration: BoxDecoration(
                 color: Color(0xFF222224),
                 borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(60.0),bottomLeft: Radius.circular(60.0),
+                  bottomRight: Radius.circular(60.0),
+                  bottomLeft: Radius.circular(60.0),
                 ),
               ),
               padding: EdgeInsets.all(16.0),
               alignment: Alignment.center,
               child: Text(
-                'Select DIV',
+                'Select Subject',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 53.0,
@@ -42,48 +41,74 @@ class Attendance extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(30.0),
                 child: ListView(
                   children: [
                     AttendanceCard(
-                      divName: 'A',
-                      inCharge: 'Laxmi Pawani',
+                      subject: 'Engineering Physics',
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Selectsubj(),
+                            builder: (context) => PhysicsG(),
                           ),
                         );
                       },
                     ),
                     AttendanceCard(
-                      divName: 'B',
-                      inCharge: 'Laxmi Pawani',
+                      subject: 'Engineering Chemistry',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChemG(),
+                          ),
+                        );
+                      },
                     ),
                     AttendanceCard(
-                      divName: 'C',
-                      inCharge: 'Laxmi Pawani',
+                      subject: 'Engineering Math',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => mathG(),
+                          ),
+                        );
+                      },
                     ),
                     AttendanceCard(
-                      divName: 'D',
-                      inCharge: 'Sakhib Sir',
+                      subject: 'Engineering Graphics',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GraphicsG(),
+                          ),
+                        );
+                      },
                     ),
                     AttendanceCard(
-                      divName: 'E',
-                      inCharge: 'Sakhib Sir',
+                      subject: 'Professional Communication \n                and Ethics',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PceG(),
+                          ),
+                        );
+                      },
                     ),
                     AttendanceCard(
-                      divName: 'F',
-                      inCharge: 'Sakhib Sir',
-                    ),
-                    AttendanceCard(
-                      divName: 'G',
-                      inCharge: 'Sakhib Sir',
-                    ),
-                    AttendanceCard(
-                      divName: 'H',
-                      inCharge: 'Sakhib Sir',
+                      subject: 'C Programming',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CpG(),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -97,22 +122,20 @@ class Attendance extends StatelessWidget {
 }
 
 class AttendanceCard extends StatelessWidget {
-  final String divName;
-  final String inCharge;
+  final String subject;
   final VoidCallback? onTap;
 
   AttendanceCard({
-    required this.divName,
-    required this.inCharge,
+    required this.subject,
     this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 20.0),
+      padding: const EdgeInsets.only(bottom: 29.0),
       child: SizedBox(
-        height: 200,
+        height: 100,
         child: GestureDetector(
           onTap: onTap,
           child: Container(
@@ -122,7 +145,7 @@ class AttendanceCard extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3), // Shadow color
-                  offset: Offset(10,10), // Right and bottom offset
+                  offset: Offset(10, 10), // Right and bottom offset
                   // blurRadius: 10, // Spread radius
                 ),
               ],
@@ -130,23 +153,15 @@ class AttendanceCard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Div $divName',
+                    subject,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 19.5,
                       fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    'Class incharge: $inCharge',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      letterSpacing: 1,
                     ),
                   ),
                 ],
@@ -154,20 +169,6 @@ class AttendanceCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class FirstCardDetailPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('First Card Detail Page'),
-      ),
-      body: Center(
-        child: Text('This is the detail page for the first card'),
       ),
     );
   }

@@ -10,7 +10,6 @@ import 'package:sies_gst_notes/TEsem1.dart';
 import 'package:sies_gst_notes/TEsem2.dart';
 import 'package:sies_gst_notes/Attendance.dart';
 
-
 class Dashboard1 extends StatelessWidget {
   List<String> cateNames = [
     "First year",
@@ -33,6 +32,8 @@ class Dashboard1 extends StatelessWidget {
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  String userName = "GSTians"; // Default value for userName
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +48,7 @@ class Dashboard1 extends StatelessWidget {
               height: MediaQuery.of(context).size.height / 1.4,
               decoration: BoxDecoration(
                 color: Color(0xFF222224),
-                borderRadius:
-                    BorderRadius.only(bottomRight: Radius.circular(00)),
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(00)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class Dashboard1 extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Hello Ujjwal",
+                    "Hello $userName", // Using dynamic userName here
                     style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
@@ -169,24 +169,19 @@ class Dashboard1 extends StatelessWidget {
         child: ListView(
           children: [
             Column(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-           
-            
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
                 Padding(
-            padding: EdgeInsets.only(left: 12.0),
-                
-               child:  Text(
-                  "What's New",
-                  style: TextStyle(
-                    color: Color(0xFF6c8c90),
-                    fontWeight: FontWeight.w900,
-                    fontSize: 23,
-                    letterSpacing: 2
+                  padding: EdgeInsets.only(left: 12.0),
+                  child: Text(
+                    "What's New",
+                    style: TextStyle(
+                        color: Color(0xFF6c8c90),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 23,
+                        letterSpacing: 2),
                   ),
-                ),
                 ),
                 SizedBox(height: 25),
                 ListTile(
@@ -203,22 +198,22 @@ class Dashboard1 extends StatelessWidget {
                   },
                 ),
                 ListTile(
-  title: Text(
-    'Attendance',
-    style: TextStyle(
-      color: Color(0xFF222224),
-      fontWeight: FontWeight.w700,
-    ),
-  ),
-  onTap: () {
-    // Navigate to the attendance page or perform desired action
-    Navigator.pop(context); // Close the drawer
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Attendance()), // Replace AttendancePage with the desired page
-    );
-  },
-),
+                  title: Text(
+                    'Attendance',
+                    style: TextStyle(
+                      color: Color(0xFF222224),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  onTap: () {
+                    // Navigate to the attendance page or perform desired action
+                    Navigator.pop(context); // Close the drawer
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Attendance()),
+                    );
+                  },
+                ),
                 ListTile(
                   title: Text(
                     'TML Updates',
@@ -268,7 +263,7 @@ class Dashboard1 extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FEsem2() ,
+                      builder: (context) => FEsem2new(),
                     ),
                   );
                 },
@@ -296,7 +291,7 @@ class Dashboard1 extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SEsem1(),
+                      builder: (context) => SEsem1new(),
                     ),
                   );
                 },
@@ -308,7 +303,7 @@ class Dashboard1 extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SEsem2(),
+                      builder: (context) => SEsem2new(),
                     ),
                   );
                 },
