@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA11Y4LI5M8y1Tar87-N2mUXOLywIQSzBw',
-    appId: '1:308009840789:web:939f85d73647cabf70ab9c',
-    messagingSenderId: '308009840789',
-    projectId: 'gst-notes',
-    authDomain: 'gst-notes.firebaseapp.com',
-    storageBucket: 'gst-notes.appspot.com',
-    measurementId: 'G-TTMGSY9B0D',
+    apiKey: 'AIzaSyD2mMV68etdeCljq82-ICltR2EcuQfetVk',
+    appId: '1:570983632012:web:3480fba0d228ccb3da3fa9',
+    messagingSenderId: '570983632012',
+    projectId: 'sies-gst-app',
+    authDomain: 'sies-gst-app.firebaseapp.com',
+    storageBucket: 'sies-gst-app.appspot.com',
+    measurementId: 'G-RM1LQ96R83',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCM1maC3vpAtZT_NSpcZs1H_7bmrZ-98ts',
-    appId: '1:308009840789:android:f5cbad28f21f300870ab9c',
-    messagingSenderId: '308009840789',
-    projectId: 'gst-notes',
-    storageBucket: 'gst-notes.appspot.com',
+    apiKey: 'AIzaSyDkemw83ua7BkYdCYEzzLv3A5zdDH8yWuM',
+    appId: '1:570983632012:android:257ab1415b64c4beda3fa9',
+    messagingSenderId: '570983632012',
+    projectId: 'sies-gst-app',
+    storageBucket: 'sies-gst-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAZgqOuulVbjAYFdlRmP1fsFQraiVex4mU',
-    appId: '1:308009840789:ios:e447a19e92da6b8a70ab9c',
-    messagingSenderId: '308009840789',
-    projectId: 'gst-notes',
-    storageBucket: 'gst-notes.appspot.com',
+    apiKey: 'AIzaSyACXPKlcmZaaEL1y1Hm6KWO0klcA4LZyxY',
+    appId: '1:570983632012:ios:347ae98bf001be34da3fa9',
+    messagingSenderId: '570983632012',
+    projectId: 'sies-gst-app',
+    storageBucket: 'sies-gst-app.appspot.com',
     iosBundleId: 'com.example.siesGstNotes',
   );
 }
