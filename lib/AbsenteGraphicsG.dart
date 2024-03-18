@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:sies_gst_notes/GraphicsG.dart';
 
 class AbsenteGraphicsG extends StatelessWidget {
   @override
@@ -19,14 +19,16 @@ class ChecklistPage extends StatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final List<String> students = List.generate(66, (index) => 'ROLL NO: ${index + 1}');
+  final List<String> students =
+      List.generate(66, (index) => 'ROLL NO: ${index + 1}');
   String searchText = '';
   List<String> checkedStudents = [];
 
   @override
   Widget build(BuildContext context) {
     List<String> filteredStudents = students.where((student) {
-      return searchText.isEmpty || student.toLowerCase().contains(searchText.toLowerCase());
+      return searchText.isEmpty ||
+          student.toLowerCase().contains(searchText.toLowerCase());
     }).toList();
 
     return Scaffold(
@@ -54,71 +56,89 @@ class _ChecklistPageState extends State<ChecklistPage> {
           Expanded(
             child: filteredStudents.isEmpty
                 ? Center(
-              child: Text('Sorry, no one in the list.'),
-            )
+                    child: Text('Sorry, no one in the list.'),
+                  )
                 : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredStudents.length,
-                    itemBuilder: (context, index) {
-                      return StudentItem(
-                        student: filteredStudents[index],
-                        index: index + 1,
-                        onChanged: (isChecked) {
-                          if (isChecked) {
-                            checkedStudents.add(filteredStudents[index]);
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredStudents.length,
+                          itemBuilder: (context, index) {
+                            return StudentItem(
+                              student: filteredStudents[index],
+                              index: index + 1,
+                              onChanged: (isChecked) {
+                                if (isChecked) {
+                                  checkedStudents.add(filteredStudents[index]);
+                                } else {
+                                  checkedStudents
+                                      .remove(filteredStudents[index]);
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // View absent students button pressed
+                          if (checkedStudents.isNotEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Absent Students'),
+                                  content: SingleChildScrollView(
+                                    // Wrap content in SingleChildScrollView
+                                    child: Container(
+                                      height: 400, // Increase the fixed height
+                                      child: ListView(
+                                        children: [
+                                          for (var student in checkedStudents)
+                                            Text(
+                                              student,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Close'),
+                                    ),
+                                     TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => GraphicsG(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text('Save'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           } else {
-                            checkedStudents.remove(filteredStudents[index]);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('No students are absent.'),
+                              ),
+                            );
                           }
                         },
-                      );
-                    },
+                        child: Text('View Absent Students'),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // View absent students button pressed
-                    if (checkedStudents.isNotEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Absent Students'),
-                            content: SingleChildScrollView( // Wrap content in SingleChildScrollView
-                              child: Container(
-                                height: 400, // Increase the fixed height
-                                child: ListView(
-                                  children: [
-                                    for (var student in checkedStudents) Text(student, style: TextStyle(color: Colors.black, fontSize:14),),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Close'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('No students are absent.'),
-                        ),
-                      );
-                    }
-                  },
-                  child: Text('View Absent Students'),
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -131,7 +151,12 @@ class StudentItem extends StatefulWidget {
   final int index;
   final ValueChanged<bool> onChanged;
 
-  const StudentItem({Key? key, required this.student, required this.index, required this.onChanged}) : super(key: key);
+  const StudentItem(
+      {Key? key,
+      required this.student,
+      required this.index,
+      required this.onChanged})
+      : super(key: key);
 
   @override
   _StudentItemState createState() => _StudentItemState();
@@ -143,10 +168,8 @@ class _StudentItemState extends State<StudentItem> {
 
   Future<int> getPresent(String documentId) async {
     try {
-      DocumentSnapshot snapshot = await _firestore
-          .collection('studentslist')
-          .doc(documentId)
-          .get();
+      DocumentSnapshot snapshot =
+          await _firestore.collection('studentslist').doc(documentId).get();
 
       int present = snapshot.get('presentEG');
       return present;
@@ -178,7 +201,8 @@ class _StudentItemState extends State<StudentItem> {
     );
   }
 
-  Future<void> updatePresentValue(String documentId, int newPresentValue) async {
+  Future<void> updatePresentValue(
+      String documentId, int newPresentValue) async {
     try {
       await _firestore.collection('studentslist').doc(documentId).update({
         'presentEG': newPresentValue,

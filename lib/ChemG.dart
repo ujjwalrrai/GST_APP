@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sies_gst_notes/AbsenteChemG.dart';
+import 'package:sies_gst_notes/AbsenteCpG.dart';
 import 'package:sies_gst_notes/AbsentePhysicsG.dart';
-import 'package:sies_gst_notes/Viewchemistry-G.dart';
-
+import 'package:sies_gst_notes/ViewCp-G.dart';
+import 'package:sies_gst_notes/Viewphysics-G.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -61,13 +61,15 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  Future<void> lecUpdate() async {
+  Future<void> lecUpdate(int increment) async {
     try {
       // Replace 'your_collection' and 'DjBr8bZnBXmH2Fd2OOfN' with your actual values
       await _firestore
           .collection('myVariable')
           .doc('GDivChemistry')
-          .update({'total_lectures': FieldValue.increment(1)});
+          .update({'total_lectures': FieldValue.increment(increment)});
+      // Update 'present' field for each student
+      await updatepresent(increment);
       // Update UI after Firebase operation
       setState(() {});
     } catch (e) {
@@ -76,16 +78,16 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  Future<void> updatepresent() async {
+  Future<void> updatepresent(int increment) async {
     try {
       // Replace 'your_collection' with the name of your Firestore collection
       QuerySnapshot querySnapshot =
           await _firestore.collection('studentslist').get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        // Update the total_lectures field for each document
+        // Update the 'present' field for each document
         await documentSnapshot.reference
-            .update({'presentCHEMISTRY': FieldValue.increment(1)});
+            .update({'presentCHEMISTRY': FieldValue.increment(increment)});
       }
       // Update UI after Firebase operation
       setState(() {});
@@ -116,7 +118,7 @@ class _CalendarPageState extends State<CalendarPage> {
             height: 150,
             alignment: Alignment.center,
             child: Text(
-              'CHEMISTRY',
+              'Chemistry',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 30,
@@ -149,7 +151,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             calendarStyle: CalendarStyle(
               selectedDecoration: BoxDecoration(
-                color: Colors.yellow, // Change color to yellow
+                color: Colors.yellow,
                 shape: BoxShape.circle,
               ),
               selectedTextStyle: TextStyle(color: Colors.black),
@@ -162,7 +164,6 @@ class _CalendarPageState extends State<CalendarPage> {
               defaultTextStyle: TextStyle(color: Colors.white),
               weekendTextStyle: TextStyle(color: Colors.white),
               outsideTextStyle: TextStyle(color: Colors.grey),
-              // unavailableTextStyle: TextStyle(color: Colors.grey),
             ),
             onDaySelected: (selectedDay, focusedDay) {
               setState(() {
@@ -171,14 +172,11 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
           ),
-          SizedBox(height: 20),
+          // SizedBox(height: 20),
           GestureDetector(
             onTap: () async {
               // Increment total lectures and update 'present' field for each student
-              await lecUpdate();
-              await updatepresent();
-              // Update UI
-              setState(() {});
+              await lecUpdate(1);
             },
             child: FutureBuilder<int>(
               future: getLectures(),
@@ -197,7 +195,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 15),
           ElevatedButton(
             child: const Text(
               'Add Lecture',
@@ -205,10 +203,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             onPressed: () async {
               // Increment total lectures and update 'present' field for each student
-              await lecUpdate();
-              await updatepresent();
-              // Update UI
-              setState(() {});
+              await lecUpdate(1);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFeccb50),
@@ -221,11 +216,16 @@ class _CalendarPageState extends State<CalendarPage> {
               'Add Absenties',
               style: TextStyle(color: Colors.black),
             ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AbsenteChemG(),
-              ),
-            ),
+            onPressed: () async {
+              // Navigate to Add Absentees screen
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AbsenteCpG(),
+                ),
+              );
+              // Update UI
+              setState(() {});
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFeccb50),
               fixedSize: Size(300.0, 45.0),
@@ -237,16 +237,37 @@ class _CalendarPageState extends State<CalendarPage> {
               'View Attendance',
               style: TextStyle(color: Colors.black),
             ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ViewChemistryG(),
-              ),
-            ),
+            onPressed: () async {
+              // Navigate to View Attendance screen
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ViewCpG(),
+                ),
+              );
+              // Update UI
+              setState(() {});
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFeccb50),
               fixedSize: Size(300.0, 45.0),
             ),
-          )
+          ),
+          SizedBox(height: 20),
+          SizedBox(
+            width: 125, // Adjust width as needed
+            height: 33, // Adjust height as needed
+            child: ElevatedButton.icon(
+              icon: Icon(Icons.replay, color: Colors.black),
+              label: Text('Undo', style: TextStyle(color: Colors.black)),
+              onPressed: () async {
+                // Decrement total lectures by 1
+                await lecUpdate(-1);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50), // Change background color as needed
+              ),
+            ),
+          ),
         ],
       ),
     );

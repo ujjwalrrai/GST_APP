@@ -55,73 +55,206 @@ class _FEsem1newState extends State<FEsem2new> {
             ),
           ),
           SizedBox(height: 60),
-          buildSubjectContainer(
-            subjectName: "Engineering Physics 1",
-            googleDriveLink: "https://drive.google.com/drive/folders/1ZeR8RYw-yHcMhsjVIMos29ugzro9kzOw?usp=drive_link",
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1XCbRz0SuoXXS6ctqYl1QCUBIJD4Sex0i?usp=drive_link");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "Engineering Physics 2",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
-          buildSubjectContainer(
-            subjectName: "Engineering Chemistry 1",
-            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          SizedBox(height: 25),
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1KYJt3l1p7n5YZZzZZ3-S-1tGMhbpPiVh?usp=drive_link");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "Engineering Chemisrty 2",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
-          buildSubjectContainer(
-            subjectName: "Engineering Mathematics 1",
-            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          SizedBox(height: 25),
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1bj85BufFlVEhcK0oHUXP0eUGcTvgt3u2?usp=drive_link");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "Engineering Math 2",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
-          buildSubjectContainer(
-            subjectName: "Basic Electrical Engineering",
-            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          SizedBox(height: 25),
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1rxaQMx7hM1CE9BWM436cs9jbfxoVXP2x");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "Engineering Graphics",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
-          buildSubjectContainer(
-            subjectName: "Engineering Mechanics",
-            googleDriveLink: "YOUR_GOOGLE_DRIVE_LINK_HERE",
+          SizedBox(height: 25),
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1OPqYq6bfgaobEX2YlHCfGhVKxmFu7PqK");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "C Programming",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
           ),
+          SizedBox(height: 25),
+          ElevatedButton(
+            onPressed: () async {
+              await _launchURL("https://drive.google.com/drive/folders/1bwmFWPRILBQRGjePnZfoJyaeHh9QhpPs?usp=sharing");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFFaf8a58),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              padding: EdgeInsets.zero,
+            ),
+            child: Container(
+              height: 60,
+              width: 350,
+              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  "Professional Communication",
+                  style: TextStyle(
+                    color: Color(0xFF222224),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+         
+          // Add ElevatedButton widgets for other subjects similarly
         ],
       ),
     );
   }
 
-  GestureDetector buildSubjectContainer({
-    required String subjectName,
-    required String googleDriveLink,
-  }) {
-    return GestureDetector(
-      onTap: () async {
-        // Launch the Google Drive link in the default browser
-        if (await canLaunch(googleDriveLink)) {
-          await launch(googleDriveLink);
-        } else {
-          throw 'Could not launch $googleDriveLink';
-        }
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 0, top: 0, right: 0, left: 0),
-        height: 70,
-        width: 400,
-        padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Color(0xFFaf8a58),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(50),
-              bottomRight: Radius.circular(50),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                subjectName,
-                style: TextStyle(
-                  color: Color(0xFF222224),
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+  Future<void> _launchURL(String url) async {
+  try {
+    bool launched = await launch(url);
+    if (!launched) {
+      throw 'Could not launch $url';
+    }
+  } catch (e) {
+    print('Error launching link: $e');
   }
+}
 }

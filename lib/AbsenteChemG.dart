@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sies_gst_notes/ChemG.dart';
 
 
 class AbsenteChemG extends StatelessWidget {
@@ -103,6 +104,16 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                 },
                                 child: Text('Close'),
                               ),
+                               TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => ChemG(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text('Save'),
+                                    ),
                             ],
                           );
                         },

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sies_gst_notes/physicsG.dart';
 
-void main() {
-  runApp(addabsente());
-}
-
-class addabsente extends StatelessWidget {
+class AbsentePhysicsG extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -57,71 +54,82 @@ class _ChecklistPageState extends State<ChecklistPage> {
           Expanded(
             child: filteredStudents.isEmpty
                 ? Center(
-              child: Text('Sorry, no one in the list.'),
-            )
+                    child: Text('Sorry, no one in the list.'),
+                  )
                 : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredStudents.length,
-                    itemBuilder: (context, index) {
-                      return StudentItem(
-                        student: filteredStudents[index],
-                        index: index + 1,
-                        onChanged: (isChecked) {
-                          if (isChecked) {
-                            checkedStudents.add(filteredStudents[index]);
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredStudents.length,
+                          itemBuilder: (context, index) {
+                            return StudentItem(
+                              student: filteredStudents[index],
+                              index: index + 1,
+                              onChanged: (isChecked) {
+                                if (isChecked) {
+                                  checkedStudents.add(filteredStudents[index]);
+                                } else {
+                                  checkedStudents.remove(filteredStudents[index]);
+                                }
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // View absent students button pressed
+                          if (checkedStudents.isNotEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Absent Students'),
+                                  content: SingleChildScrollView(
+                                    child: Container(
+                                      height: 400,
+                                      child: ListView(
+                                        children: [
+                                          for (var student in checkedStudents)
+                                            Text(student, style: TextStyle(color: Colors.black, fontSize: 14)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Close'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => PhysicsG(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text('Save'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           } else {
-                            checkedStudents.remove(filteredStudents[index]);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('No students are absent.'),
+                              ),
+                            );
                           }
                         },
-                      );
-                    },
+                        child: Text('View Absent Students'),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // View absent students button pressed
-                    if (checkedStudents.isNotEmpty) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Absent Students'),
-                            content: SingleChildScrollView( // Wrap content in SingleChildScrollView
-                              child: Container(
-                                height: 400, // Increase the fixed height
-                                child: ListView(
-                                  children: [
-                                    for (var student in checkedStudents) Text(student, style: TextStyle(color: Colors.black, fontSize:14),),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Close'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('No students are absent.'),
-                        ),
-                      );
-                    }
-                  },
-                  child: Text('View Absent Students'),
-                ),
-              ],
-            ),
           ),
         ],
       ),

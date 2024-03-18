@@ -1,10 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:sies_gst_notes/AbsenteMathG.dart';
-import 'package:sies_gst_notes/AbsentePhysicsG.dart';
 import 'package:sies_gst_notes/ViewMath-G.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class mathG extends StatelessWidget {
@@ -45,10 +44,8 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<int> getLectures() async {
     try {
       // Replace 'your_collection' with the name of your Firestore collection
-      DocumentSnapshot snapshot = await _firestore
-          .collection('myVariable')
-          .doc('GdivMaths2')
-          .get();
+      DocumentSnapshot snapshot =
+          await _firestore.collection('myVariable').doc('GdivMaths2').get();
 
       // Replace 'your_field' with the name of the field containing the integer value
       int total_lectures = snapshot.get('total_lectures');
@@ -59,13 +56,15 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  Future<void> lecUpdate() async {
+  Future<void> lecUpdate(int increment) async {
     try {
       // Replace 'your_collection' and 'DjBr8bZnBXmH2Fd2OOfN' with your actual values
       await _firestore
           .collection('myVariable')
           .doc('GdivMaths2')
-          .update({'total_lectures': FieldValue.increment(1)});
+          .update({'total_lectures': FieldValue.increment(increment)});
+      // Update 'presentMATHS2' field for each student
+      await updatepresent(increment);
       // Update UI after Firebase operation
       setState(() {});
     } catch (e) {
@@ -74,16 +73,16 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-  Future<void> updatepresent() async {
+  Future<void> updatepresent(int increment) async {
     try {
       // Replace 'your_collection' with the name of your Firestore collection
       QuerySnapshot querySnapshot =
           await _firestore.collection('studentslist').get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        // Update the total_lectures field for each document
+        // Update the presentMATHS2 field for each document
         await documentSnapshot.reference
-            .update({'presentMATHS2': FieldValue.increment(1)});
+            .update({'presentMATHS2': FieldValue.increment(increment)});
       }
       // Update UI after Firebase operation
       setState(() {});
@@ -114,13 +113,20 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             height: 150,
             alignment: Alignment.center,
-            child: Text(
-              'MATH',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'MATH',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+               
+                
+              ],
             ),
           ),
           SizedBox(height: 10),
@@ -169,7 +175,9 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
           ),
-          SizedBox(height: 20),
+         
+          
+          
           FutureBuilder<int>(
             future: getLectures(),
             builder: (context, snapshot) {
@@ -186,16 +194,15 @@ class _CalendarPageState extends State<CalendarPage> {
               }
             },
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 15),
           ElevatedButton(
             child: const Text(
               'Add Lecture',
               style: TextStyle(color: Colors.black),
             ),
             onPressed: () async {
-              // Increment total lectures and update 'present' field for each student
-              await lecUpdate();
-              await updatepresent();
+              // Increment total lectures by 1
+              await lecUpdate(1);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFeccb50),
@@ -234,6 +241,23 @@ class _CalendarPageState extends State<CalendarPage> {
               fixedSize: Size(300.0, 45.0),
             ),
           ),
+          SizedBox(height: 15),
+           SizedBox(
+          
+  width: 125, // Adjust width as needed
+  height: 33, // Adjust height as needed
+  child: ElevatedButton.icon(
+    icon: Icon(Icons.replay, color: Colors.black),
+    label: Text('Undo', style: TextStyle(color: Colors.black),),
+    onPressed: () async {
+      // Decrement total lectures by 1
+      await lecUpdate(-1);
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Color(0xFFeccb50), // Change background color as needed
+    ),
+  ),
+),
         ],
       ),
     );
