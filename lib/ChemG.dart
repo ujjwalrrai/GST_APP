@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sies_gst_notes/AbsenteChemG.dart';
 import 'package:sies_gst_notes/AbsenteCpG.dart';
 import 'package:sies_gst_notes/AbsentePhysicsG.dart';
 import 'package:sies_gst_notes/ViewCp-G.dart';
+import 'package:sies_gst_notes/Viewchemistry-G.dart';
 import 'package:sies_gst_notes/Viewphysics-G.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -220,7 +222,7 @@ class _CalendarPageState extends State<CalendarPage> {
               // Navigate to Add Absentees screen
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AbsenteCpG(),
+                  builder: (context) => AbsenteChemG(),
                 ),
               );
               // Update UI
@@ -241,7 +243,7 @@ class _CalendarPageState extends State<CalendarPage> {
               // Navigate to View Attendance screen
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => ViewCpG(),
+                  builder: (context) => ViewChemistryG(),
                 ),
               );
               // Update UI

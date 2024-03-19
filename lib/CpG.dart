@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sies_gst_notes/AbsenteCpG.dart';
-import 'package:sies_gst_notes/AbsentePhysicsG.dart';
 import 'package:sies_gst_notes/ViewCp-G.dart';
-import 'package:sies_gst_notes/Viewphysics-G.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -172,102 +170,104 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
           ),
-          // SizedBox(height: 20),
-          GestureDetector(
-            onTap: () async {
-              // Increment total lectures and update 'present' field for each student
-              await lecUpdate(1);
-            },
-            child: FutureBuilder<int>(
-              future: getLectures(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else {
-                  int totalLectures = snapshot.data!;
-                  return Text(
-                    "Total lectures: $totalLectures",
-                    style: TextStyle(color: Color(0xFFe1d5c9), fontSize: 25),
-                  );
-                }
+          if (isSameDay(_selectedDay, DateTime.now())) ...[
+            // SizedBox(height: 20),
+            GestureDetector(
+              onTap: () async {
+                // Increment total lectures and update 'present' field for each student
+                await lecUpdate(1);
               },
-            ),
-          ),
-          SizedBox(height: 15),
-          ElevatedButton(
-            child: const Text(
-              'Add Lecture',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () async {
-              // Increment total lectures and update 'present' field for each student
-              await lecUpdate(1);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            child: const Text(
-              'Add Absenties',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () async {
-              // Navigate to Add Absentees screen
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => AbsenteCpG(),
-                ),
-              );
-              // Update UI
-              setState(() {});
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            child: const Text(
-              'View Attendance',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () async {
-              // Navigate to View Attendance screen
-              await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => ViewCpG(),
-                ),
-              );
-              // Update UI
-              setState(() {});
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
-            ),
-          ),
-          SizedBox(height: 20),
-          SizedBox(
-            width: 125, // Adjust width as needed
-            height: 33, // Adjust height as needed
-            child: ElevatedButton.icon(
-              icon: Icon(Icons.replay, color: Colors.black),
-              label: Text('Undo', style: TextStyle(color: Colors.black)),
-              onPressed: () async {
-                // Decrement total lectures by 1
-                await lecUpdate(-1);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFFeccb50), // Change background color as needed
+              child: FutureBuilder<int>(
+                future: getLectures(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    int totalLectures = snapshot.data!;
+                    return Text(
+                      "Total lectures: $totalLectures",
+                      style: TextStyle(color: Color(0xFFe1d5c9), fontSize: 25),
+                    );
+                  }
+                },
               ),
             ),
-          ),
+            SizedBox(height: 15),
+            ElevatedButton(
+              child: const Text(
+                'Add Lecture',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async {
+                // Increment total lectures and update 'present' field for each student
+                await lecUpdate(1);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text(
+                'Add Absenties',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async {
+                // Navigate to Add Absentees screen
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AbsenteCpG(),
+                  ),
+                );
+                // Update UI
+                setState(() {});
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text(
+                'View Attendance',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async {
+                // Navigate to View Attendance screen
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ViewCpG(),
+                  ),
+                );
+                // Update UI
+                setState(() {});
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              width: 125, // Adjust width as needed
+              height: 33, // Adjust height as needed
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.replay, color: Colors.black),
+                label: Text('Undo', style: TextStyle(color: Colors.black)),
+                onPressed: () async {
+                  // Decrement total lectures by 1
+                  await lecUpdate(-1);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFeccb50), // Change background color as needed
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
