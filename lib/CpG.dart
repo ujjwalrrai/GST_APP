@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:sies_gst_notes/AbsenteCpG.dart';
 import 'package:sies_gst_notes/ViewCp-G.dart';
@@ -5,6 +6,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart'; // Import DateFormat class
 
 class CpG extends StatelessWidget {
   @override
@@ -34,6 +36,7 @@ class _CalendarPageState extends State<CalendarPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   late Future<int> lecturesFuture;
+  late String formattedSelectedDate; // Added formattedSelectedDate variable
 
   @override
   void initState() {
@@ -101,6 +104,8 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    formattedSelectedDate = DateFormat('yyyy-MM-dd').format(_selectedDay);
+
     return Scaffold(
       backgroundColor: Color(0xFF222224),
       body: Column(
@@ -213,9 +218,10 @@ class _CalendarPageState extends State<CalendarPage> {
             ElevatedButton(
               child: const Text(
                 'Add Absenties',
-                style: TextStyle(color: Colors.black),
+                 style: TextStyle(color: Colors.black),
               ),
-              onPressed: () async {
+              onPressed: () async
+              {
                 // Navigate to Add Absentees screen
                 await Navigator.of(context).push(
                   MaterialPageRoute(
@@ -266,6 +272,36 @@ class _CalendarPageState extends State<CalendarPage> {
                   backgroundColor: Color(0xFFeccb50), // Change background color as needed
                 ),
               ),
+            ),
+          ]
+          
+         else ...[
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('checkedStudents')
+                  .doc(formattedSelectedDate) // Use formattedSelectedDate
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Text('Loading...'); // Show loading indicator
+                }
+                if (!snapshot.data!.exists) {
+                  return Text('No data available for this date.');
+                }
+                var checkedStudentsData = snapshot.data;
+                // Retrieve the array from the document data
+                List<dynamic> checkedStudents = checkedStudentsData!['students'];
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: checkedStudents.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(checkedStudents[index],style: TextStyle(color: Color(0xFFeccb45), fontSize: 15),),
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ],

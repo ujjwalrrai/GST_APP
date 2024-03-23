@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sies_gst_notes/physicsG.dart';
+import 'package:intl/intl.dart';
 
 class AbsentePhysicsG extends StatelessWidget {
   @override
@@ -77,56 +77,58 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // View absent students button pressed
-                          if (checkedStudents.isNotEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Absent Students'),
-                                  content: SingleChildScrollView(
-                                    child: Container(
-                                      height: 400,
-                                      child: ListView(
-                                        children: [
-                                          for (var student in checkedStudents)
-                                            Text(student, style: TextStyle(color: Colors.black, fontSize: 14)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Close'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => PhysicsG(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // View absent students button pressed
+                              if (checkedStudents.isNotEmpty) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Absent Students'),
+                                      content: SingleChildScrollView(
+                                        child: Container(
+                                          height: 400,
+                                          child: ListView(
+                                            children: [
+                                              for (var student in checkedStudents)
+                                                Text(student, style: TextStyle(color: Colors.black, fontSize: 14)),
+                                            ],
                                           ),
-                                        );
-                                      },
-                                      child: Text('Save'),
-                                    ),
-                                  ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Close'),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('No students are absent.'),
-                              ),
-                            );
-                          }
-                        },
-                        child: Text('View Absent Students'),
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('No students are absent.'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text('View Absent Students'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Save checked students to Firestore
+                              saveCheckedStudentsToFirestore();
+                            },
+                            child: Text('Save Checked Students'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -135,8 +137,43 @@ class _ChecklistPageState extends State<ChecklistPage> {
       ),
     );
   }
+
+ Future<void> saveCheckedStudentsToFirestore() async {
+  try {
+    // Get today's date
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    // Create a document reference with today's date
+    DocumentReference documentRef = _firestore.collection('checkedStudentsPhysics').doc(today);
+
+    // Check if document with today's date already exists
+    bool documentExists = (await documentRef.get()).exists;
+
+    // If document already exists, generate a new document ID by adding a timestamp
+    if (documentExists) {
+      String timestamp = DateFormat('HHmmss').format(DateTime.now());
+      documentRef = _firestore.collection('checkedStudentsPhysics').doc('$today-$timestamp');
+    }
+
+    // Save checked students to Firestore
+    await documentRef.set({'students': checkedStudents});
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Checked students saved successfully for $today.'),
+      ),
+    );
+  } catch (e) {
+    print('Error saving checked students to Firestore: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to save checked students.'),
+      ),
+    );
+  }
 }
 
+}
 class StudentItem extends StatefulWidget {
   final String student;
   final int index;
@@ -154,11 +191,7 @@ class _StudentItemState extends State<StudentItem> {
 
   Future<int> getPresent(String documentId) async {
     try {
-      DocumentSnapshot snapshot = await _firestore
-          .collection('studentslist')
-          .doc(documentId)
-          .get();
-
+      DocumentSnapshot snapshot = await _firestore.collection('studentslist').doc(documentId).get();
       int present = snapshot.get('present');
       return present;
     } catch (e) {

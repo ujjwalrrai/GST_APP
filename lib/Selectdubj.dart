@@ -50,7 +50,7 @@ class Selectsubj extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => PhysicsG(),
+                            builder: (context) => physicsG(),
                           ),
                         );
                       },

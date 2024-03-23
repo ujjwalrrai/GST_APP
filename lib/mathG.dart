@@ -1,10 +1,13 @@
-
 import 'package:flutter/material.dart';
+import 'package:sies_gst_notes/AbsenteCpG.dart';
 import 'package:sies_gst_notes/AbsenteMathG.dart';
+import 'package:sies_gst_notes/ViewCp-G.dart';
 import 'package:sies_gst_notes/ViewMath-G.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart'; // Import DateFormat class
 
 class mathG extends StatelessWidget {
   @override
@@ -32,7 +35,9 @@ class CalendarPage extends StatefulWidget {
 
 class _CalendarPageState extends State<CalendarPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   late Future<int> lecturesFuture;
+  late String formattedSelectedDate; // Added formattedSelectedDate variable
 
   @override
   void initState() {
@@ -44,8 +49,10 @@ class _CalendarPageState extends State<CalendarPage> {
   Future<int> getLectures() async {
     try {
       // Replace 'your_collection' with the name of your Firestore collection
-      DocumentSnapshot snapshot =
-          await _firestore.collection('myVariable').doc('GdivMaths2').get();
+      DocumentSnapshot snapshot = await _firestore
+          .collection('myVariable')
+          .doc('GdivMaths2')
+          .get();
 
       // Replace 'your_field' with the name of the field containing the integer value
       int total_lectures = snapshot.get('total_lectures');
@@ -63,7 +70,7 @@ class _CalendarPageState extends State<CalendarPage> {
           .collection('myVariable')
           .doc('GdivMaths2')
           .update({'total_lectures': FieldValue.increment(increment)});
-      // Update 'presentMATHS2' field for each student
+      // Update 'present' field for each student
       await updatepresent(increment);
       // Update UI after Firebase operation
       setState(() {});
@@ -80,7 +87,7 @@ class _CalendarPageState extends State<CalendarPage> {
           await _firestore.collection('studentslist').get();
 
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        // Update the presentMATHS2 field for each document
+        // Update the 'present' field for each document
         await documentSnapshot.reference
             .update({'presentMATHS2': FieldValue.increment(increment)});
       }
@@ -98,35 +105,29 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    formattedSelectedDate = DateFormat('yyyy-MM-dd').format(_selectedDay);
+
     return Scaffold(
-      backgroundColor: Color(0xFF222224), // Background color
+      backgroundColor: Color(0xFF222224),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(80),
-                bottomRight: Radius.circular(80),
-              ),
+                  bottomLeft: Radius.circular(80),
+                  bottomRight: Radius.circular(80)),
               color: Color(0xFFe1d5c9),
             ),
             height: 150,
             alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'MATH',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-               
-                
-              ],
+            child: Text(
+              'Engineering Maths 2',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           SizedBox(height: 10),
@@ -154,7 +155,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             calendarStyle: CalendarStyle(
               selectedDecoration: BoxDecoration(
-                color: Colors.yellow, // Change color to yellow
+                color: Colors.yellow,
                 shape: BoxShape.circle,
               ),
               selectedTextStyle: TextStyle(color: Colors.black),
@@ -175,89 +176,134 @@ class _CalendarPageState extends State<CalendarPage> {
               });
             },
           ),
-         
-          
-          
-          FutureBuilder<int>(
-            future: getLectures(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                int totalLectures = snapshot.data!;
-                return Text(
-                  "Total lectures: $totalLectures",
-                  style: TextStyle(color: Color(0xFFe1d5c9), fontSize: 25),
+          if (isSameDay(_selectedDay, DateTime.now())) ...[
+            // SizedBox(height: 20),
+            GestureDetector(
+              onTap: () async {
+                // Increment total lectures and update 'present' field for each student
+                await lecUpdate(1);
+              },
+              child: FutureBuilder<int>(
+                future: getLectures(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    int totalLectures = snapshot.data!;
+                    return Text(
+                      "Total lectures: $totalLectures",
+                      style: TextStyle(color: Color(0xFFe1d5c9), fontSize: 25),
+                    );
+                  }
+                },
+              ),
+            ),
+            SizedBox(height: 15),
+            ElevatedButton(
+              child: const Text(
+                'Add Lecture',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async {
+                // Increment total lectures and update 'present' field for each student
+                await lecUpdate(1);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text(
+                'Add Absenties',
+                 style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async
+              {
+                // Navigate to Add Absentees screen
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AbsenteMathG(),
+                  ),
                 );
-              }
-            },
-          ),
-          SizedBox(height: 15),
-          ElevatedButton(
-            child: const Text(
-              'Add Lecture',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () async {
-              // Increment total lectures by 1
-              await lecUpdate(1);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            child: const Text(
-              'Add Absenties',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => AbsenteMathG(),
+                // Update UI
+                setState(() {});
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
-            ),
-          ),
-          SizedBox(height: 20),
-          ElevatedButton(
-            child: const Text(
-              'View Attendance',
-              style: TextStyle(color: Colors.black),
-            ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ViewMathG(),
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: const Text(
+                'View Attendance',
+                style: TextStyle(color: Colors.black),
+              ),
+              onPressed: () async {
+                // Navigate to View Attendance screen
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ViewMathG(),
+                  ),
+                );
+                // Update UI
+                setState(() {});
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFFeccb50),
+                fixedSize: Size(300.0, 45.0),
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFFeccb50),
-              fixedSize: Size(300.0, 45.0),
+            SizedBox(height: 20),
+            SizedBox(
+              width: 125, // Adjust width as needed
+              height: 33, // Adjust height as needed
+              child: ElevatedButton.icon(
+                icon: Icon(Icons.replay, color: Colors.black),
+                label: Text('Undo', style: TextStyle(color: Colors.black)),
+                onPressed: () async {
+                  // Decrement total lectures by 1
+                  await lecUpdate(-1);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFeccb50), // Change background color as needed
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 15),
-           SizedBox(
-          
-  width: 125, // Adjust width as needed
-  height: 33, // Adjust height as needed
-  child: ElevatedButton.icon(
-    icon: Icon(Icons.replay, color: Colors.black),
-    label: Text('Undo', style: TextStyle(color: Colors.black),),
-    onPressed: () async {
-      // Decrement total lectures by 1
-      await lecUpdate(-1);
-    },
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFFeccb50), // Change background color as needed
-    ),
-  ),
-),
+          ]
+         else ...[
+            StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('checkedStudentsMaths')
+                  .doc(formattedSelectedDate) // Use formattedSelectedDate
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Text('Loading...'); // Show loading indicator
+                }
+                if (!snapshot.data!.exists) {
+                  return Text('No data available for this date.');
+                }
+                var checkedStudentsData = snapshot.data;
+                // Retrieve the array from the document data
+                List<dynamic> checkedStudents = checkedStudentsData!['students'];
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: checkedStudents.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(checkedStudents[index],style: TextStyle(color: Colors.white),),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ],
       ),
     );

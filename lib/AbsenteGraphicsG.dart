@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sies_gst_notes/GraphicsG.dart';
+import 'package:intl/intl.dart';
 
 class AbsenteGraphicsG extends StatelessWidget {
   @override
@@ -19,16 +19,14 @@ class ChecklistPage extends StatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final List<String> students =
-      List.generate(66, (index) => 'ROLL NO: ${index + 1}');
+  final List<String> students = List.generate(66, (index) => 'ROLL NO: ${index + 1}');
   String searchText = '';
   List<String> checkedStudents = [];
 
   @override
   Widget build(BuildContext context) {
     List<String> filteredStudents = students.where((student) {
-      return searchText.isEmpty ||
-          student.toLowerCase().contains(searchText.toLowerCase());
+      return searchText.isEmpty || student.toLowerCase().contains(searchText.toLowerCase());
     }).toList();
 
     return Scaffold(
@@ -71,8 +69,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                                 if (isChecked) {
                                   checkedStudents.add(filteredStudents[index]);
                                 } else {
-                                  checkedStudents
-                                      .remove(filteredStudents[index]);
+                                  checkedStudents.remove(filteredStudents[index]);
                                 }
                               },
                             );
@@ -80,62 +77,58 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          // View absent students button pressed
-                          if (checkedStudents.isNotEmpty) {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Absent Students'),
-                                  content: SingleChildScrollView(
-                                    // Wrap content in SingleChildScrollView
-                                    child: Container(
-                                      height: 400, // Increase the fixed height
-                                      child: ListView(
-                                        children: [
-                                          for (var student in checkedStudents)
-                                            Text(
-                                              student,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Close'),
-                                    ),
-                                     TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => GraphicsG(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              // View absent students button pressed
+                              if (checkedStudents.isNotEmpty) {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Absent Students'),
+                                      content: SingleChildScrollView(
+                                        child: Container(
+                                          height: 400,
+                                          child: ListView(
+                                            children: [
+                                              for (var student in checkedStudents)
+                                                Text(student, style: TextStyle(color: Colors.black, fontSize: 14)),
+                                            ],
                                           ),
-                                        );
-                                      },
-                                      child: Text('Save'),
-                                    ),
-                                  ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('Close'),
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('No students are absent.'),
-                              ),
-                            );
-                          }
-                        },
-                        child: Text('View Absent Students'),
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('No students are absent.'),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text('View Absent Students'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Save checked students to Firestore
+                              saveCheckedStudentsToFirestore();
+                            },
+                            child: Text('Save Checked Students'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -144,19 +137,49 @@ class _ChecklistPageState extends State<ChecklistPage> {
       ),
     );
   }
+
+ Future<void> saveCheckedStudentsToFirestore() async {
+  try {
+    // Get today's date
+    String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    // Create a document reference with today's date
+    DocumentReference documentRef = _firestore.collection('checkedStudentsGraphics').doc(today);
+
+    // Check if document with today's date already exists
+    bool documentExists = (await documentRef.get()).exists;
+
+    // If document already exists, generate a new document ID by adding a timestamp
+    if (documentExists) {
+      String timestamp = DateFormat('HHmmss').format(DateTime.now());
+      documentRef = _firestore.collection('checkedStudentsGraphics').doc('$today-$timestamp');
+    }
+
+    // Save checked students to Firestore
+    await documentRef.set({'students': checkedStudents});
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Checked students saved successfully for $today.'),
+      ),
+    );
+  } catch (e) {
+    print('Error saving checked students to Firestore: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Failed to save checked students.'),
+      ),
+    );
+  }
 }
 
+}
 class StudentItem extends StatefulWidget {
   final String student;
   final int index;
   final ValueChanged<bool> onChanged;
 
-  const StudentItem(
-      {Key? key,
-      required this.student,
-      required this.index,
-      required this.onChanged})
-      : super(key: key);
+  const StudentItem({Key? key, required this.student, required this.index, required this.onChanged}) : super(key: key);
 
   @override
   _StudentItemState createState() => _StudentItemState();
@@ -168,9 +191,7 @@ class _StudentItemState extends State<StudentItem> {
 
   Future<int> getPresent(String documentId) async {
     try {
-      DocumentSnapshot snapshot =
-          await _firestore.collection('studentslist').doc(documentId).get();
-
+      DocumentSnapshot snapshot = await _firestore.collection('studentslist').doc(documentId).get();
       int present = snapshot.get('presentEG');
       return present;
     } catch (e) {
@@ -201,8 +222,7 @@ class _StudentItemState extends State<StudentItem> {
     );
   }
 
-  Future<void> updatePresentValue(
-      String documentId, int newPresentValue) async {
+  Future<void> updatePresentValue(String documentId, int newPresentValue) async {
     try {
       await _firestore.collection('studentslist').doc(documentId).update({
         'presentEG': newPresentValue,
